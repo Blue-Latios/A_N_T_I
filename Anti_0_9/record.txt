@@ -1,0 +1,105 @@
+World: Droned Fighter
+Rounds completed: 0
+Survival time: 4.818
+Bombs remaining: 2
+Date: Thu Jul 19 14:42:09 2018
+Shot type: Spread
+
+World: Droned Fighter
+Rounds completed: 0
+Survival time: 4.019
+Bombs remaining: 2
+Date: Thu Jul 19 15:02:02 2018
+Shot type: Laser
+
+World: Droned Fighter
+Rounds completed: 0
+Survival time: 5.802
+Bombs remaining: 2
+Date: Thu Jul 19 15:02:14 2018
+Shot type: Laser
+
+World: Rapid Shooter
+Rounds completed: 0
+Survival time: 21.97
+Bombs remaining: 2
+Date: Thu Jul 19 15:02:43 2018
+Shot type: Spread
+
+World: Droned Fighter
+Rounds completed: 0
+Survival time: 7.268
+Bombs remaining: 2
+Date: Sun Jul 22 16:06:05 2018
+Shot type: Laser
+
+World: Chaser
+Rounds completed: 0
+Survival time: 5.302
+Bombs remaining: 2
+Date: Sun Jul 22 16:06:20 2018
+Shot type: Spread
+
+World: Rapid Shooter
+Rounds completed: 0
+Survival time: 15.071
+Bombs remaining: 2
+Date: Sun Jul 22 16:06:47 2018
+Shot type: Spread
+
+World: Level B
+Rounds completed: 0
+Survival time: 7.551
+Bombs remaining: 2
+Date: Sun Jul 22 16:07:06 2018
+Shot type: Laser
+
+World: Rapid Shooter
+Rounds completed: 0
+Survival time: 27.254
+Bombs remaining: 0
+Date: Sun Jul 22 16:07:42 2018
+Shot type: Laser
+
+World: Level B
+Rounds completed: 1
+Survival time: 36.468
+Bombs remaining: 1
+Date: Sun Jul 22 16:08:24 2018
+Shot type: Laser
+
+World: Droned Fighter
+Rounds completed: 0
+Survival time: 15.068
+Bombs remaining: 2
+Date: Sun Jul 22 16:08:49 2018
+Shot type: Laser
+
+World: Ripples
+Rounds completed: 2
+Survival time: 53.319
+Bombs remaining: 2
+Date: Sun Jul 22 16:09:47 2018
+Shot type: Laser
+
+World: Level B
+Rounds completed: 0
+Survival time: 16.286
+Bombs remaining: 2
+Date: Sun Jul 22 16:10:12 2018
+Shot type: Laser
+
+World: Level A
+Rounds completed: 4
+Survival time: 79.902
+Bombs remaining: 2
+Date: Sun Jul 22 16:11:46 2018
+Shot type: Laser
+
+World: Chaser
+Rounds completed: 0
+Survival time: 2.5
+Bombs remaining: 2
+Date: Sun Jul 22 16:12:01 2018
+Shot type: Laser
+

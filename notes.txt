@@ -1,0 +1,1 @@
+Object management may be done better with shared_ptr, but I dunno.
