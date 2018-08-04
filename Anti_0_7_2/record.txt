@@ -1,0 +1,94 @@
+
+
+
+World: Ripples
+Rounds completed: 0
+Survival time: 3.667
+Bombs remaining: 2
+Date: Thu Jun  7 15:19:10 2018
+
+
+World: Zone
+Rounds completed: 3
+Survival time: 5.251
+Bombs remaining: 2
+Date: Thu Jun  7 15:52:07 2018
+
+
+World: Zone
+Rounds completed: 2
+Survival time: 19.119
+Bombs remaining: 2
+Date: Thu Jun  7 15:53:40 2018
+
+
+World: Chaser
+Rounds completed: 9
+Survival time: 85.255
+Bombs remaining: 2
+Date: Thu Jun  7 15:55:10 2018
+
+
+World: Zone
+Rounds completed: 1
+Survival time: 9.55
+Bombs remaining: 0
+Date: Thu Jun  7 15:59:29 2018
+
+
+World: Zone
+Rounds completed: 2
+Survival time: 22.236
+Bombs remaining: 1
+Date: Mon Jun 11 14:36:07 2018
+
+
+World: Zone
+Rounds completed: 0
+Survival time: 5.917
+Bombs remaining: 2
+Date: Mon Jun 11 18:23:59 2018
+
+
+World: Zone
+Rounds completed: 0
+Survival time: 0.818
+Bombs remaining: 2
+Date: Mon Jun 11 18:32:49 2018
+
+
+World: Zone
+Rounds completed: 0
+Survival time: 0.817
+Bombs remaining: 2
+Date: Mon Jun 11 18:33:50 2018
+
+
+World: Zone
+Rounds completed: 0
+Survival time: 1.768
+Bombs remaining: 2
+Date: Mon Jun 11 18:35:36 2018
+
+
+World: Zone
+Rounds completed: 0
+Survival time: 2.901
+Bombs remaining: 2
+Date: Fri Jun 15 16:19:13 2018
+
+
+World: Zone
+Rounds completed: 0
+Survival time: 2.683
+Bombs remaining: 2
+Date: Fri Jun 15 16:20:05 2018
+
+
+World: Zone
+Rounds completed: 4
+Survival time: 34.552
+Bombs remaining: 2
+Date: Fri Jun 15 16:20:52 2018
+
+

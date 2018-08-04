@@ -1,0 +1,7 @@
+g++ -o game game.cpp Dimensions.cpp Point.cpp Time.cpp Object2D.cpp PatternObj.cpp SquareObj.cpp QuadObj.cpp TriangleObj.cpp Spawner2D.cpp Letter.cpp randomer.cpp Lists.hpp -lglu32 -lopengl32 -lglfw3 -mwindows
+
+//Linux:
+g++ -o game game.cpp Dimensions.cpp Point.cpp Time.cpp Object2D.cpp PatternObj.cpp SquareObj.cpp QuadObj.cpp TriangleObj.cpp Spawner2D.cpp Letter.cpp randomer.cpp Lists.hpp -lGLU -lGL -lglfw
+
+//Exporting:
+-static-libgcc -static-libstdc++ 

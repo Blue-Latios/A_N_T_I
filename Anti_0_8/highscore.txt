@@ -1,0 +1,4 @@
+World: Danmaku_Fireworks
+Rounds completed: 8
+Date: Sun Jul  1 10:27:36 2018
+Shot type: Laser
