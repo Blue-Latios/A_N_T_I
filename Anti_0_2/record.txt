@@ -1,0 +1,138 @@
+World: Level_A
+Survival time: 6.482
+
+World: Level_A
+Survival time: 7.549
+
+World: Level_A
+Survival time: 7.851
+
+World: Level_A
+Survival time: 8.218
+
+World: Level_A
+Survival time: 14.518
+
+World: Level_A
+Survival time: 11.535
+
+World: Level_A
+Survival time: 15.834
+
+World: Level_A
+Survival time: 16.75
+
+World: Level_A
+Survival time: 15.8
+
+World: Level_A
+Survival time: 11.801
+
+World: Level_A
+Survival time: 6.551
+
+World: Level_A
+Survival time: 5.018
+
+World: Zone
+Survival time: 3.117
+
+World: Zone
+Survival time: 0.75
+
+World: Zone
+Survival time: 2.584
+
+World: Level_A
+Survival time: 4.885
+
+World: Zone
+Survival time: 1.168
+
+World: Zone
+Survival time: 0.551
+
+World: Level_A
+Survival time: 3.8
+
+World: Zone
+Survival time: 2.984
+
+World: Zone
+Survival time: 2.564
+
+World: Zone
+Survival time: 2.217
+
+World: Zone
+Survival time: 2.283
+
+World: Zone
+Survival time: 1.517
+
+World: Zone
+Survival time: 1.767
+
+World: Zone
+Survival time: 1.599
+
+World: Zone
+Survival time: 0.782
+
+World: Level_A
+Survival time: 6.063
+
+World: Level_A
+Survival time: 4.432
+
+World: Zone
+Survival time: 0.414
+
+World: Level_A
+Survival time: 8.835
+
+World: Zone
+Survival time: 1.017
+
+World: Zone
+Survival time: 1.651
+
+World: Zone
+Survival time: 1.701
+
+World: Zone
+Survival time: 0.649
+
+World: Zone
+Survival time: 0.917
+
+World: Level_A
+Survival time: 7.167
+
+World: Level_A
+Survival time: 7.068
+
+World: Level_A
+Survival time: 6.834
+
+World: Level_A
+Survival time: 6.017
+
+World: Zone
+Survival time: 14.703
+
+World: Zone
+Survival time: 9.634
+
+World: Level_A
+Survival time: 42.035
+
+World: Level_A
+Survival time: 18.234
+
+World: Zone
+Survival time: 51.668
+
+World: Level_A
+Survival time: 64.335
+
