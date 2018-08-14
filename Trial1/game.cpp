@@ -38,6 +38,8 @@ int worldn = 0;
 Time delaytime;
 bool gameover = false;
 bool spacepressed = false;
+bool hardmode = false;
+bool practicemode = false;
 
 const float SHOT_DELAY = 0.095;
 
@@ -52,23 +54,24 @@ float mainmenutext[3000];
 int mainmenumark[6];
 const string mainmenu1 = "T R I A L S";
 const string mainmenu2 = "";
-const string mainmenu3 = "";
-const string mainmenu4 = "Press Spacebar to begin trial.";
+const string mainmenu3 = "Press Spacebar to begin trial.";
+const string mainmenu4 = "Press X to begin hard mode.";
 const string mainmenu5 = "Press H for help. Press Esc to quit.";
 
-float wintext[1600];
-int winmark[3];
+float wintext[3200];
+int winmark[4];
 const string wintext1 = "END OF GAME";
 const string wintext2 = "Thanks for playing";
+const string wintext3 = "You can press numbers 1 to 6 and certain alphabet keys in help page to practise.";
 
 float helptext[9300];
 int helpmark[7];
 const string help1 = "Dodge all obstacles. Move with mouse.";
-const string help2 = "Hold spacebar to shoot enemies.";
+const string help2 = "Hold Spacebar to shoot enemies.";
 const string help3 = "Press X to use bomb. You can carry MAXIMUM 5 bombs per trial.";
 const string help4 = "It is up to you to change your mouse sensitivity.";
 const string help5 = "This game may not be completable by everyone. Stay calm.";
-const string help6 = "Press anything on the keyboard to return to main menu.";
+const string help6 = "Press Spacebar to return to main menu.";
 
 float backtext[100000];
 int backmark[13];
@@ -188,6 +191,8 @@ const int QUAD_5 = 12;
 const int SQUARE_3 = 13;
 const int SQUARE_4 = 14;
 const int TRIANGLE_4 = 15;
+const int TRIANGLE_5 = 16;
+const int SQUARE_5 = 17;
 
 void Spawner2D::spawnObject() {
 	switch(spawntype) {
@@ -207,10 +212,11 @@ void Spawner2D::spawnObject() {
 			Qu.add(QuadObj(spawner->getX() + WINDOW_HEIGHT/2*cos(convertToRadian(ang)), spawner->getY() - WINDOW_HEIGHT/2*sin(convertToRadian(ang)), WINDOW_WIDTH, 35, 5, 1.8));
 			Qu[0].setAngle(ang);
 			Qu[0].getColorData()[0] = 0.0;
+			if (hardmode) Qu[0].setDim2(30);
 		} break;
 		case TRIANGLE_1 : {
 			Tr.add(TriangleObj(spawner->getX(), spawner->getY(), 45, 40, 5));
-			Tr[0].setSpeed(7);
+			Tr[0].setSpeed(!hardmode? 7 : 8);
 			Tr[0].setAngle(-spawner->angleTo(Point(xpos, ypos)));
 			Tr[0].setDirection(Tr[0].getAngle());
 			Tr[0].getColorData()[1] = 0.8;
@@ -218,8 +224,11 @@ void Spawner2D::spawnObject() {
 			Tr[0].getColorData()[2] = 0.0;
 		} break;
 		case SQUARE_1 : {
-			subSpw.add(Spawner2D(new SquareObj(spawner->getX(), spawner->getY(), 190, 1.0), TYPE_SQUARE, 0.978, 999, TRIANGLE_2));
-			subSpw[0].getObject()->setSpeed(7);
+			float
+				xpdel = hardmode ? 0.75 : 1.0,
+				speed = hardmode ? 9.0 : 7.0;
+			subSpw.add(Spawner2D(new SquareObj(spawner->getX(), spawner->getY(), 190, xpdel), TYPE_SQUARE, xpdel - 0.022, 999, TRIANGLE_2));
+			subSpw[0].getObject()->setSpeed(speed);
 			subSpw[0].getObject()->setDirection(-spawner->angleTo(Point(xpos, ypos)));
 			subSpw[0].getObject()->setAngle(subSpw[0].getObject()->getDirection());
 			subSpw[0].getObject()->getColorData()[0] = 0.3;
@@ -253,9 +262,12 @@ void Spawner2D::spawnObject() {
 			Tr[0].getColorData()[2] = 0.1;
 		} break;
 		case TRIANGLE_2 : {
+			float
+				xpdel = hardmode ? 0.75 : 1.0,
+				speed = hardmode ? 6.0 : 5.0;
 			for (int i = 0; i < 4; i++) {
-				subSpw.add(Spawner2D(new TriangleObj(spawner->getX(), spawner->getY(), 70*sqrtThree, 140, 1.0), TYPE_TRIANGLE, 0.978, 999, QUAD_3));
-				subSpw[0].getObject()->setSpeed(5);
+				subSpw.add(Spawner2D(new TriangleObj(spawner->getX(), spawner->getY(), 70*sqrtThree, 140, xpdel), TYPE_TRIANGLE, xpdel - 0.022, 999, QUAD_3));
+				subSpw[0].getObject()->setSpeed(speed);
 				subSpw[0].getObject()->setDirection(spawner->getAngle() + 90*i + 45);
 				subSpw[0].getObject()->setAngle(subSpw[0].getObject()->getDirection());
 				subSpw[0].getObject()->getColorData()[0] = 0.3;
@@ -265,7 +277,7 @@ void Spawner2D::spawnObject() {
 		case QUAD_3 : {
 			for (int i = 0; i < 3; i++) {
 				Qu.add(QuadObj(spawner->getX(), spawner->getY(), 120, 50, 16));
-				Qu[0].setSpeed(2.6);
+				Qu[0].setSpeed(hardmode?2.2:2.6);
 				Qu[0].setDirection(spawner->getAngle() + 120*i);
 				Qu[0].setAngle(Qu[0].getDirection());
 				Qu[0].getColorData()[0] = 0.3;
@@ -293,6 +305,27 @@ void Spawner2D::spawnObject() {
 			}
 			patterner++;
 		} break;
+		case SQUARE_5 : {
+			for (int i = 0; i < 5; i++) {
+				Sq.add(SquareObj(spawner->getX(), spawner->getY(), 20, 999));
+				Sq[0].setSpeed(randomFloat(1.9, 4.5));
+				float d = randomFloat(0, 360);
+				Sq[0].setAngle(d);
+				Sq[0].setDirection(d);
+			}
+			if (patterner%25 == 0) {
+				float ang = -spawner->angleTo(Point(xpos, ypos));
+				for (int i = 0; i < 48; i++) {
+					Sq.add(SquareObj(spawner->getX(), spawner->getY(), 40, 5));
+					Sq[0].setSpeed(3.8);
+					Sq[0].setAngle(ang+(float)i/24*180);
+					Sq[0].setDirection(Sq[0].getAngle());
+					Sq[0].getColorData()[1] = 0.7;
+					Sq[0].getColorData()[2] = 0.1;
+				}
+			}
+			patterner++;
+		} break;
 		case CIRCLE_1 : {
 			Ptt.add(PatternObj(spawner->getX(), spawner->getY(), 48, PATTERN_DEFAULT));
 			Ptt[0].setSpeed(2.8);
@@ -300,22 +333,59 @@ void Spawner2D::spawnObject() {
 			int ran = randomInt(0,1);
 			for (int i = 0; i < 48; i++) {
 				float ang = -spawner->angleTo(Point(xpos, ypos)) + (float)i/48*360;
-				subSpw.add(Spawner2D(new SquareObj(spawner->getX() + 100*cos(convertToRadian(ang)), spawner->getY() - 100*sin(convertToRadian(ang)), 20, 8.1), TYPE_SQUARE, 2.8, 999, TRIANGLE_3));
+				subSpw.add(
+					Spawner2D(
+						new SquareObj(
+							spawner->getX() + 100*cos(convertToRadian(ang)),
+							spawner->getY() - 100*sin(convertToRadian(ang)),
+							20, 8.1
+						),
+						TYPE_SQUARE, 2.8, 999, TRIANGLE_3
+					)
+				);
 				subSpw[0].getObject()->setDirection(ang);
 				subSpw[0].getObject()->setAngle(subSpw[0].getObject()->getDirection() + 90 - 180*ran);
 				subSpw[0].getObject()->getColorData()[0] = 0.8;
 				subSpw[0].getObject()->getColorData()[1] = 0.0;
 				Ptt[0].add(subSpw[0].getObject());
 			}
+			if (hardmode) {
+				patterner++;
+				if (patterner%4 == 0) {
+					float ang = -spawner->angleTo(Point(xpos, ypos));
+					for (int i = 0; i < 48; i++) {
+						Tr.add(TriangleObj(spawner->getX(), spawner->getY(), 27, 20, 30));
+						Tr[0].setSpeed(4);
+						Tr[0].setAngle(ang+(float)i/24*180);
+						Tr[0].setDirection(Tr[0].getAngle());
+						Tr[0].getColorData()[0] = 0.9;
+						Tr[0].getColorData()[1] = 0.5;
+						Tr[0].getColorData()[2] = 0.9;
+					}
+				}
+			}
 		} break;
 		case TRIANGLE_3 : {
-			Tr.add(TriangleObj(spawner->getX(), spawner->getY(), 27, 20, 15));
+			Tr.add(TriangleObj(spawner->getX(), spawner->getY(), 27, 20, 30));
 			Tr[0].setSpeed(4);
 			Tr[0].setAngle(spawner->getAngle());
 			Tr[0].setDirection(Tr[0].getAngle());
 			Tr[0].getColorData()[0] = 0.6;
 			Tr[0].getColorData()[1] = 0.0;
 			Tr[0].getColorData()[2] = 0.6;
+		} break;
+		case TRIANGLE_5 : {
+			for(int i=0; i<2; i++)
+				for(int j=0; j<2; j++)
+					for(int k=0; k<4; k++) {
+						Tr.add(TriangleObj(-30 + (WINDOW_WIDTH+60)*i, -30 + (WINDOW_HEIGHT+60)*j, 27, 20, 15));
+						Tr[0].setSpeed(2.4);
+						Tr[0].setAngle(k * 90 + 45 + randomFloat(35.0,44.0) * (randomInt(0,1)==0 ? 1 : -1));
+						Tr[0].setDirection(Tr[0].getAngle());
+						Tr[0].getColorData()[0] = 0.4;
+						Tr[0].getColorData()[1] = 0.0;
+						Tr[0].getColorData()[2] = 0.4;
+					}
 		} break;
 		case EFFECT_1 : {
 			float ang = randomFloat(0.0, 360.0);
@@ -324,7 +394,6 @@ void Spawner2D::spawnObject() {
 			Sq[0].setSpeed(sqrt(Sq[0].distanceSquaredTo(*spawner))/50);
 			Sq[0].setAngle(ang - 180);
 			Sq[0].setDirection(Sq[0].getAngle());
-			patterner++;
 		} break;
 		case QUAD_4 : {
 			Ptt.add(PatternObj(spawner->getX(), spawner->getY(), 2, PATTERN_DEFAULT));
@@ -376,6 +445,9 @@ void createLevel() {
 			Spw[0].getObject()->getColorData()[0] = 0.7;
 			Spw[0].getObject()->getColorData()[1] = 0.7;
 			Spw[0].getObject()->getColorData()[2] = 0.7;
+			if (hardmode) {
+				Spw[0].setSpawnTime(0.3);
+			}
 			worldn = 1;
 			pointmark = Point(WINDOW_WIDTH/2, 135);
 			
@@ -389,18 +461,27 @@ void createLevel() {
 			Spw[0].getObject()->getColorData()[0] = 0.7;
 			Spw[0].getObject()->getColorData()[1] = 0.7;
 			Spw[0].getObject()->getColorData()[2] = 0.7;
-			for (int i = 0; i < 45; i++) {
-				defSpw.add(Spawner2D(new TriangleObj(WINDOW_WIDTH/40*(i-2), -30, 1, 1, 999), TYPE_NULL, 6, 1, QUAD_2));
-				defSpw[0].getSpawnTimer().setTime(10*i);
+			if (!hardmode)
+				for (int i = 0; i < 47; i++) {
+					defSpw.add(Spawner2D(new TriangleObj(WINDOW_WIDTH/40*(i-3), -30, 1, 1, 999), TYPE_NULL, 6, 1, QUAD_2));
+					defSpw[0].getSpawnTimer().setTime(10*i);
+				}
+			else {
+				for (int i = 0; i < 67; i++) {
+					defSpw.add(Spawner2D(new TriangleObj(WINDOW_WIDTH/60*(i-3), -30, 1, 1, 999), TYPE_NULL, 6, 1, QUAD_2));
+					defSpw[0].getSpawnTimer().setTime(4*i);
+				}
+				Spw[0].setSpawnTime(0.5);
 			}
+			
 			worldn = 1;
 			
 			convertStringToLetterData("C Sign: Assignment Hunt", 10, 10, linesize, title, titlemark, true);
 		} break;
 		case ID_TEST3 : {
 			pointmark = Point(WINDOW_WIDTH/2, 135);
-			Spw.add(Spawner2D(new SquareObj(expos, eypos, 220, 999, 1.8), TYPE_SQUARE, 999, 370, SQUARE_1));
-			Spw[0].getObject()->setSpeed(8);
+			Spw.add(Spawner2D(new SquareObj(expos, eypos, 220, 999, 1.6), TYPE_SQUARE, 999, 370, SQUARE_1));
+			Spw[0].getObject()->setSpeed(10);
 			Spw[0].getObject()->setDirection(-Spw[0].getObject()->angleTo(pointmark));
 			Spw[0].getObject()->getColorData()[0] = 0.7;
 			Spw[0].getObject()->getColorData()[1] = 0.7;
@@ -422,8 +503,8 @@ void createLevel() {
 			convertStringToLetterData("C Sign: Complex Deathlock", 10, 10, linesize, title, titlemark, true);
 		} break;
 		case ID_TEST5 : {
-			pointmark = Point(WINDOW_WIDTH/2, 135);
-			Spw.add(Spawner2D(new SquareObj(expos, eypos, 220, 999, 2.5), TYPE_SQUARE, 2.5, 360, CIRCLE_1));
+			pointmark = Point(WINDOW_WIDTH/2, 150);
+			Spw.add(Spawner2D(new SquareObj(expos, eypos, 220, 999, 2.5), TYPE_SQUARE, hardmode ? 2.0 : 2.7, 360, CIRCLE_1));
 			Spw[0].getObject()->setSpeed(3);
 			Spw[0].getObject()->setDirection(-Spw[0].getObject()->angleTo(pointmark));
 			Spw[0].getObject()->getColorData()[0] = 0.7;
@@ -436,18 +517,18 @@ void createLevel() {
 		case ID_TEST6 : {
 			pointmark = Point(WINDOW_WIDTH/2, 135);
 			Spw.add(Spawner2D(new SquareObj(expos, eypos, 220, 35, 38), TYPE_SQUARE, 999, 400, QUAD_5));
-			Spw[0].getObject()->setSpeed(5);
+			Spw[0].getObject()->setSpeed(7);
 			Spw[0].getObject()->setDirection(-Spw[0].getObject()->angleTo(pointmark));
 			Spw[0].getObject()->getColorData()[0] = 0.7;
 			Spw[0].getObject()->getColorData()[1] = 0.7;
 			Spw[0].getObject()->getColorData()[2] = 0.7;
-			worldn = 1;
+			worldn = 2;
 			
 			convertStringToLetterData("C Sign: Death Pointers", 10, 10, linesize, title, titlemark, true);
 		} break;
 		case ID_FINAL : {
 			pointmark = Point(WINDOW_WIDTH/2, 135);
-			Spw.add(Spawner2D(new SquareObj(expos, eypos, 220, 999, 3), TYPE_SQUARE, 0.008, 640, SQUARE_2));
+			Spw.add(Spawner2D(new SquareObj(pointmark.getX(), pointmark.getY(), 220, 999, 3), TYPE_SQUARE, (hardmode ? 0.018 : 0.008), 750, SQUARE_2));
 			Spw[0].getObject()->getColorData()[0] = 0.7;
 			Spw[0].getObject()->getColorData()[1] = 0.7;
 			Spw[0].getObject()->getColorData()[2] = 0.7;
@@ -542,14 +623,23 @@ void bomb() {
 
 //Switch levels
 void switchLevel(int gmode) {
+	if (practicemode) {
+		gmode = ID_MAINMENU;
+	} else if (gamemode == ID_HELP) {
+		practicemode = true;
+		bombcount = 0;
+	}
 	clearLevel(gmode);
 	gamemode = gmode;
 	createLevel();
 	patterner = 0;
 	if ((gamemode <= 0) || (gamemode > ZONE_LIMIT)) {
-		bombcount = 5;
+		practicemode = false;
+		hardmode = false;
+		expos = WINDOW_WIDTH/2;
+		eypos = 135;
 	}
-	if (gmode > ZONE_LIMIT)
+	if (gamemode > ZONE_LIMIT)
 		delaytime.resetTime();
 }
 
@@ -564,7 +654,14 @@ void keyCallback(GLFWwindow* window, int key, int scanc, int act, int mods) {
 			case ID_MAINMENU :
 				switch(key) {
 					case GLFW_KEY_SPACE :
+						spacepressed = true;
 						switchLevel(ID_TEST);
+						bombcount = 5;
+					break;
+					case GLFW_KEY_X :
+						hardmode = true;
+						switchLevel(ID_TEST);
+						bombcount = 5;
 					break;
 					case GLFW_KEY_H :
 						switchLevel(ID_HELP);
@@ -575,7 +672,35 @@ void keyCallback(GLFWwindow* window, int key, int scanc, int act, int mods) {
 				}
 			break;
 			case ID_HELP :
-				switchLevel(ID_MAINMENU);
+				switch(key) {
+					case GLFW_KEY_Q : hardmode = true;
+					case GLFW_KEY_1 :
+						switchLevel(ID_TEST2);
+					break;
+					case GLFW_KEY_W : hardmode = true;
+					case GLFW_KEY_2 :
+						switchLevel(ID_TEST3);
+					break;
+					case GLFW_KEY_E : hardmode = true;
+					case GLFW_KEY_3 :
+						switchLevel(ID_TEST4);
+					break;
+					case GLFW_KEY_R : hardmode = true;
+					case GLFW_KEY_4 :
+						switchLevel(ID_TEST5);
+					break;
+					case GLFW_KEY_T : hardmode = true;
+					case GLFW_KEY_5 :
+						switchLevel(ID_TEST6);
+					break;
+					case GLFW_KEY_Y : hardmode = true;
+					case GLFW_KEY_6 :
+						switchLevel(ID_FINAL);
+					break;
+					case GLFW_KEY_SPACE :
+						switchLevel(ID_MAINMENU);
+					break;
+				}
 			break;
 			case ID_GAMEOVER :
 				switch (key) {
@@ -997,12 +1122,57 @@ void moveObjects() {
 }
 
 void normalDraw() {
+	moveObjects();
 	checkDamaged();
 	spawnObjects();
 	drawObjects();
 }
-						
 
+void checkGameOver() {
+	Sq.setBegin();
+	while ((!Sq.atEnd()) && (!gameover)) {
+		if (Sq.getIValue().isMaterialised() && Sq.getIValue().isIn(Point(xpos, ypos))) {
+			gameOver();
+		}
+		Sq.next();
+	}
+	Tr.setBegin();
+	while ((!Tr.atEnd()) && (!gameover)) {
+		if (Tr.getIValue().isMaterialised() && Tr.getIValue().isIn(Point(xpos, ypos))) {
+			gameOver();
+		}
+		Tr.next();
+	}
+	Qu.setBegin();
+	while ((!Qu.atEnd()) && (!gameover)) {
+		if (Qu.getIValue().isMaterialised() && Qu.getIValue().isIn(Point(xpos, ypos))) {
+			gameOver();
+		}
+		Qu.next();
+		}
+	defSpw.setBegin();
+	while ((!defSpw.atEnd()) && (!gameover)) {
+		if (defSpw.getIValue().getObject()->isMaterialised() && defSpw.getIValue().getObject()->isIn(Point(xpos, ypos)) && defSpw.getIValue().getObjType() != TYPE_NULL) {
+			gameOver();
+		}
+		defSpw.next();
+	}
+	subSpw.setBegin();
+	while ((!subSpw.atEnd()) && (!gameover)) {
+		if (subSpw.getIValue().getObject()->isMaterialised() && subSpw.getIValue().getObject()->isIn(Point(xpos, ypos))) {
+			gameOver();
+		}
+		subSpw.next();
+	}
+		Spw.setBegin();
+	while ((!Spw.atEnd()) && (!gameover)) {
+		if (Spw.getIValue().getObject()->isMaterialised() && Spw.getIValue().getObject()->isIn(Point(xpos, ypos))) {
+			gameOver();
+		}
+		Spw.next();
+	}
+}
+					
 int main() {
 	
 	//Inisialisasi GLFW
@@ -1066,7 +1236,9 @@ int main() {
 	convertStringToLetterData(wintext1, WINDOW_WIDTH/2 - getStringWidth(wintext1, linesize)/2, WINDOW_HEIGHT/4, linesize, wintext, winmark[1], false);
 	winmark[2] = winmark[1];
 	convertStringToLetterData(wintext2, WINDOW_WIDTH/2 - getStringWidth(wintext2, linesize)/2, WINDOW_HEIGHT*2/3, linesize, wintext, winmark[2], false);
-	convertPointData(wintext, 0, winmark[2]);
+	winmark[3] = winmark[2];
+	convertStringToLetterData(wintext3, WINDOW_WIDTH/2 - getStringWidth(wintext3, 1)/2, WINDOW_HEIGHT*9/10, 1, wintext, winmark[3], false);
+	convertPointData(wintext, 0, winmark[3]);
 	
 	linesize = 7;
 	mainmenumark[0] = 0;
@@ -1111,9 +1283,7 @@ int main() {
 	xpos = WINDOW_WIDTH/2;
 	ypos = WINDOW_HEIGHT/2;
 	
-	gamemode = ID_HELP;
-	
-	bombcount = 3;
+	gamemode = ID_MAINMENU;
 	
 	healthBar.setY(3);
 	healthBar.setDim2(4);
@@ -1179,7 +1349,7 @@ int main() {
 						Spw[0].getObject()->setSpeed(sqrt(Spw[0].getObject()->distanceSquaredTo(pointmark))/280);
 						Spw[0].getObject()->setDirection(-Spw[0].getObject()->angleTo(pointmark));
 					}
-					if (Spw[0].getObject()->isMaterialised()) {
+					if (Spw[0].getObject()->isMaterialised() && !hardmode) {
 						glBegin(GL_LINES);
 							glVertex2f(widthConvert(xpos), heightConvert(ypos));
 							glVertex2f(widthConvert(Spw[0].getObject()->getX()), heightConvert(Spw[0].getObject()->getY()));
@@ -1217,7 +1387,7 @@ int main() {
 						Spw[0].getObject()->setDirection(-Spw[0].getObject()->angleTo(pointmark));
 						if (Spw[0].getObject()->isMaterialised())
 							Spw[0].spawnObject();
-					} else if (worldtime[0].getElapsed() > 1.4) {
+					} else if (worldtime[0].getElapsed() > (hardmode ? 0.99 : 1.4)) {
 						Spw[0].getObject()->setSpeed(sqrt(Spw[0].getObject()->distanceSquaredTo(pointmark))/8);
 					}
 					normalDraw();
@@ -1228,10 +1398,10 @@ int main() {
 					switchLevel(ID_TEST5);
 				} else if (!gameover) {
 					if (Spw[0].getObject()->distanceSquaredTo(pointmark) < 10) {
-						if ((randomInt(0,1) == 0 && Spw[0].getObject()->getX() < WINDOW_WIDTH-480) || Spw[0].getObject()->getX() < 480)
-							pointmark = Point(randomFloat(Spw[0].getObject()->getX()+100, Spw[0].getObject()->getX()+180), randomFloat(90, 180));
+						if ((randomInt(0,1) == 0 && Spw[0].getObject()->getX() < WINDOW_WIDTH-500) || Spw[0].getObject()->getX() < 500)
+							pointmark = Point(randomFloat(Spw[0].getObject()->getX()+90, Spw[0].getObject()->getX()+140), randomFloat(90, 180));
 						else
-							pointmark = Point(randomFloat(Spw[0].getObject()->getX()-100, Spw[0].getObject()->getX()-180), randomFloat(90, 180));
+							pointmark = Point(randomFloat(Spw[0].getObject()->getX()-90, Spw[0].getObject()->getX()-140), randomFloat(90, 180));
 						Spw[0].getObject()->setSpeed(sqrt(Spw[0].getObject()->distanceSquaredTo(pointmark))/280);
 						Spw[0].getObject()->setDirection(-Spw[0].getObject()->angleTo(pointmark));
 					}
@@ -1243,13 +1413,18 @@ int main() {
 					}
 					Tr.setBegin();
 					while (!Tr.atEnd()) {
-						Tr.getIValue().setSpeed(Tr.getIValue().getSpeed() + 0.12);
+						if (Tr.getIValue().getColorData()[0] > 0.5)
+							Tr.getIValue().setSpeed(Tr.getIValue().getSpeed() + 0.12);
 						Tr.next();
 					}
-					if (Spw[0].getHealth() < 130 && Spw[0].getSpawnTime() > 2) {
+					
+					if (hardmode && Spw[0].getHealth() < 120 && defSpw.isEmpty()) {
+						Qu.add(QuadObj(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT, 0.05, 1));
+						defSpw.add(Spawner2D(new SquareObj(-100, -100, 220, 999), TYPE_NULL, 0.3, 1, TRIANGLE_5));
+					} else if (Spw[0].getHealth() < (hardmode? 240 : 130) && Spw[0].getSpawnTime() > 2) {
 						Spw[0].setSpawnTime(1.0);
 						Spw[0].getSpawnTimer().resetTime();
-						Qu.add(QuadObj(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT, 0.03, 1));
+						Qu.add(QuadObj(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT, 0.05, 1));
 					}
 					normalDraw();
 				}
@@ -1259,10 +1434,10 @@ int main() {
 					switchLevel(ID_TEST6);
 				} else if (!gameover) {
 					if (Spw[0].getObject()->distanceSquaredTo(pointmark) < 10) {
-						if ((randomInt(0,1) == 0 && Spw[0].getObject()->getX() < WINDOW_WIDTH-400) || Spw[0].getObject()->getX() < 400)
-							pointmark = Point(randomFloat(Spw[0].getObject()->getX()+100, Spw[0].getObject()->getX()+200), randomFloat(90, 180));
+						if ((randomInt(0,1) == 0 && Spw[0].getObject()->getX() < WINDOW_WIDTH-480) || Spw[0].getObject()->getX() < 480)
+							pointmark = Point(randomFloat(Spw[0].getObject()->getX()+90, Spw[0].getObject()->getX()+170), randomFloat(110, 180));
 						else
-							pointmark = Point(randomFloat(Spw[0].getObject()->getX()-100, Spw[0].getObject()->getX()-200), randomFloat(90, 180));
+							pointmark = Point(randomFloat(Spw[0].getObject()->getX()-90, Spw[0].getObject()->getX()-170), randomFloat(110, 180));
 						Spw[0].getObject()->setSpeed(sqrt(Spw[0].getObject()->distanceSquaredTo(pointmark))/280);
 						Spw[0].getObject()->setDirection(-Spw[0].getObject()->angleTo(pointmark));
 					}
@@ -1273,9 +1448,10 @@ int main() {
 				if (!gameover && Spw.isEmpty()) {
 					switchLevel(ID_FINAL);
 				} else if (!gameover) {
+					if (defSpw.isEmpty() && worldtime[0].getElapsed() > 2.5)
+						Spw[0].spawnObject();
 					if (Spw[0].getObject()->distanceSquaredTo(pointmark) < 10 && Spw[0].getObject()->getSpeed() > 1) {
 						Spw[0].getObject()->setSpeed(0);
-						Spw[0].spawnObject();
 					}
 					if (!defPtt.isEmpty()) {
 						if (defPtt[0].getSpeed() < 0.2) {
@@ -1285,6 +1461,33 @@ int main() {
 							defPtt[0].setSpeed(14);
 						} else {
 							defPtt[0].setSpeed(defPtt[0].getSpeed() - 0.18);
+						}
+					}
+					if (hardmode) {
+						if (worldtime[0].getElapsed() > 15) {
+							if (worldtime[1].getElapsed() > 0.7) {
+								for (int i = 0; i < 11; i++) {
+									Qu.add(QuadObj(WINDOW_WIDTH/10.0 * i, -100, 80, 18, 5));
+									Qu[0].setSpeed(7);
+									Qu[0].setAngle(270);
+									Qu[0].setDirection(Qu[0].getAngle());
+									Qu[0].getColorData()[2] = 0.0;
+									Tr.add(TriangleObj(Qu[0].getX() + 54*cos(convertToRadian(Qu[0].getAngle())), Qu[0].getY() - 54*sin(convertToRadian(Qu[0].getAngle())), 42, 30, 5));
+									Tr[0].setSpeed(7);
+									Tr[0].setAngle(Qu[0].getAngle());
+									Tr[0].setDirection(Qu[0].getAngle());
+									Tr[0].getColorData()[2] = 0.0;
+								}
+								worldtime[1].resetTime();
+							}
+						} else if (worldtime[0].getElapsed() > 12) {
+							glColor4f(1.0,1.0,1.0,0.6);
+							glBegin(GL_LINES);
+								for (int i = 0; i < 11; i++) {
+									glVertex2f(2.0/10.0*i - 1.0, -1.0);
+									glVertex2f(2.0/10.0*i - 1.0, 1.0);
+								}
+							glEnd();
 						}
 					}
 					Ptt.setBegin();
@@ -1309,8 +1512,42 @@ int main() {
 					if (Spw[0].getObject()->distanceSquaredTo(pointmark) < 10 && Spw[0].getObject()->getSpeed() > 1) {
 						Spw[0].getObject()->setSpeed(0);
 					}
-					deleteOBObjects();
+					if (hardmode && Spw[0].getHealth() < 250 && Spw[0].getSpawnTime() < 0.01) {
+						Sq.removeAll();
+						Tr.removeAll();
+						Qu.add(QuadObj(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT, 999, 999));
+						Spw[0].setSpawnTime(0.018);
+						Spw[0].setSpawnType(SQUARE_5);
+						worldtime[0].resetTime();
+						patterner = 0;
+					} else if (hardmode && Spw[0].getHealth() < 550 && worldtime[0].getElapsed() > 6.5) {
+						Sq.removeAll();
+						Qu.add(QuadObj(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT, 0.05, 1));
+						Spw[0].setSpawnTime(0.008);
+						worldtime[0].resetTime();
+						patterner = 0;
+					}
+					if (hardmode && Spw[0].getHealth() < 550) {
+						if (worldtime[0].getElapsed() > (Spw[0].getHealth() < 250 ? 4.5 : 6)) {
+							float ang = -Spw[0].getObject()->angleTo(Point(xpos, ypos));
+							for (int i = 0; i < 7; i++) {
+								Tr.add(TriangleObj(Spw[0].getObject()->getX(), Spw[0].getObject()->getY(), 60, 40, 6));
+								Tr[0].setSpeed(8);
+								Tr[0].setAngle(ang+3*(i-3));
+								Tr[0].setDirection(Tr[0].getAngle());
+								Tr[0].getColorData()[2] = 0.0;
+							}
+							worldtime[0].resetTime();
+						} else if (worldtime[0].getElapsed() > (Spw[0].getHealth() < 250 ? 2.0 : 3.5)) {
+							glColor4f(1.0,1.0,1.0,0.6);
+							glBegin(GL_LINES);
+								glVertex2f(widthConvert(xpos), heightConvert(ypos));
+								glVertex2f(widthConvert(Spw[0].getObject()->getX()), heightConvert(Spw[0].getObject()->getY()));
+							glEnd();
+						}
+					}
 					normalDraw();
+					deleteOBObjects();
 				}
 			} break;
 			case ID_MAINMENU: 
@@ -1326,13 +1563,15 @@ int main() {
 				glDrawArrays(GL_LINES, 0, helpmark[6]/2);
 			} break;
 			case ID_WIN: {
-				glColor4f(1.0,1.0,1.0,1.0);
+				glColor4f(0.8,0.8,0.8,1.0);
 				glVertexPointer(2, GL_FLOAT, 0, borders);
 				glDrawArrays(GL_POLYGON, 0, 4);
 				glLineWidth(7);
 				glVertexPointer (2, GL_FLOAT, 0, wintext);
 				glColor4f(0.0,0.0,0.0,(delaytime.getElapsed() - 1));
 				glDrawArrays(GL_LINES, 0, winmark[2]/2);
+				glLineWidth(1);
+				glDrawArrays(GL_LINES, winmark[2]/2, (winmark[3] - winmark[2])/2);
 			} break;
 			default: //ID_GAMEOVER
 				if (delaytime.getElapsed() > 6) {
@@ -1355,8 +1594,6 @@ int main() {
 		
 		///Draw title
 		drawTitle();
-		///move objects
-		moveObjects();
 		
 		///Draw borders
 		glLineWidth(2);
@@ -1365,48 +1602,7 @@ int main() {
 		glDrawArrays(GL_LINE_LOOP, 0, 4);
 		
 		//Check gameover
-		Sq.setBegin();
-		while ((!Sq.atEnd()) && (!gameover)) {
-			if (Sq.getIValue().isMaterialised() && Sq.getIValue().isIn(Point(xpos, ypos))) {
-				gameOver();
-			}
-			Sq.next();
-		}
-		Tr.setBegin();
-		while ((!Tr.atEnd()) && (!gameover)) {
-			if (Tr.getIValue().isMaterialised() && Tr.getIValue().isIn(Point(xpos, ypos))) {
-				gameOver();
-			}
-			Tr.next();
-		}
-		Qu.setBegin();
-		while ((!Qu.atEnd()) && (!gameover)) {
-			if (Qu.getIValue().isMaterialised() && Qu.getIValue().isIn(Point(xpos, ypos))) {
-				gameOver();
-			}
-			Qu.next();
-		}
-		defSpw.setBegin();
-		while ((!defSpw.atEnd()) && (!gameover)) {
-			if (defSpw.getIValue().getObject()->isMaterialised() && defSpw.getIValue().getObject()->isIn(Point(xpos, ypos)) && defSpw.getIValue().getObjType() != TYPE_NULL) {
-				gameOver();
-			}
-			defSpw.next();
-		}
-		subSpw.setBegin();
-		while ((!subSpw.atEnd()) && (!gameover)) {
-			if (subSpw.getIValue().getObject()->isMaterialised() && subSpw.getIValue().getObject()->isIn(Point(xpos, ypos))) {
-				gameOver();
-			}
-			subSpw.next();
-		}
-		Spw.setBegin();
-		while ((!Spw.atEnd()) && (!gameover)) {
-			if (Spw.getIValue().getObject()->isMaterialised() && Spw.getIValue().getObject()->isIn(Point(xpos, ypos))) {
-				gameOver();
-			}
-			Spw.next();
-		}
+		checkGameOver();
 		
 		if (gameover) { //gameover
 			if (delaytime.getElapsed() > 2) {
