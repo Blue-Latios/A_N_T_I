@@ -528,7 +528,7 @@ void createLevel() {
 		} break;
 		case ID_FINAL : {
 			pointmark = Point(WINDOW_WIDTH/2, 135);
-			Spw.add(Spawner2D(new SquareObj(pointmark.getX(), pointmark.getY(), 220, 999, 3), TYPE_SQUARE, (hardmode ? 0.018 : 0.008), 750, SQUARE_2));
+			Spw.add(Spawner2D(new SquareObj(pointmark.getX(), pointmark.getY(), 220, 999, 3), TYPE_SQUARE, (hardmode ? 0.018 : 0.008), (hardmode ? 750 : 500), SQUARE_2));
 			Spw[0].getObject()->getColorData()[0] = 0.7;
 			Spw[0].getObject()->getColorData()[1] = 0.7;
 			Spw[0].getObject()->getColorData()[2] = 0.7;

@@ -1,5 +1,5 @@
 #include "randomer.hpp"
-
+#include <ctime>
 #include <random>
 
 std::mt19937 G(time(0)); //Seed dengan time(0)
