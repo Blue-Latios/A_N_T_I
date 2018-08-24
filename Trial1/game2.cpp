@@ -50,32 +50,32 @@ float gameovertext[1200];
 int gameovermark[1];
 const string gameover1 = "GAME OVER";
 
-float mainmenutext[3000];
+float mainmenutext[4000];
 int mainmenumark[6];
 const string mainmenu1 = "T R I A L S";
 const string mainmenu2 = "";
-const string mainmenu3 = "Press Spacebar to begin trial.";
-const string mainmenu4 = "Press X to begin the true trial.";
-const string mainmenu5 = "Press H for help. Press Esc to quit.";
+const string mainmenu3 = "Click Left Button to begin trial.";
+const string mainmenu4 = "Click Right Button to begin the true trial.";
+const string mainmenu5 = "Left click here for help. Right click here to quit.";
 
 float wintext[3200];
 int winmark[4];
 const string wintext1 = "END OF GAME";
 const string wintext2 = "Thanks for playing";
-const string wintext3 = "You can press numbers 1 to 6 and certain alphabet keys in help page to practise.";
+const string wintext3 = "You are amazing";
 
 float helptext[9300];
 int helpmark[7];
 const string help1 = "Dodge all obstacles. Move with mouse.";
-const string help2 = "Hold Spacebar to shoot enemies.";
-const string help3 = "Press X to use bomb. You can carry MAXIMUM 5 bombs per trial.";
+const string help2 = "Click Left Button to shoot at enemies.";
+const string help3 = "Click Right Button to use bomb. MAXIMUM 5 bombs per trial.";
 const string help4 = "It is up to you to change your mouse sensitivity.";
 const string help5 = "This game may not be completable by everyone. Stay calm.";
-const string help6 = "Press Spacebar to return to main menu.";
+const string help6 = "Click any button to return to main menu.";
 
 float backtext[100000];
 int backmark[13];
-const string back1 = "C C C C C C C C C C C C C C C C C C C C C C C C C C C";
+const string back1 = "C C C C C C C C C C C C C C C C C C C C C C C";
 
 
 ///Title texts
@@ -480,7 +480,7 @@ void createLevel() {
 		} break;
 		case ID_TEST3 : {
 			pointmark = Point(WINDOW_WIDTH/2, 135);
-			Spw.add(Spawner2D(new SquareObj(expos, eypos, 220, 999, 1.4), TYPE_SQUARE, 999, 370, SQUARE_1));
+			Spw.add(Spawner2D(new SquareObj(expos, eypos, 220, 999, 1.6), TYPE_SQUARE, 999, 370, SQUARE_1));
 			Spw[0].getObject()->setSpeed(10);
 			Spw[0].getObject()->setDirection(-Spw[0].getObject()->angleTo(pointmark));
 			Spw[0].getObject()->getColorData()[0] = 0.7;
@@ -535,7 +535,7 @@ void createLevel() {
 			worldn = 1;
 			defSpw.add(Spawner2D(new SquareObj(pointmark.getX(), pointmark.getY(), 1, 2.5, 1.0), TYPE_NULL, 0.008, 1, EFFECT_1));
 			
-			convertStringToLetterData("Final Sign: Bullet Hell", 10, 10, linesize, title, titlemark, true);
+			convertStringToLetterData("Final Sign: Minutes Before Deadline", 10, 10, linesize, title, titlemark, true);
 		} break;
 		default:
 			worldn = 1;
@@ -648,94 +648,56 @@ void errCallback(int error, const char* desc) {
 	cerr << "Error: " << desc << endl;
 }
 
-void keyCallback(GLFWwindow* window, int key, int scanc, int act, int mods) {
+void mouseCallback(GLFWwindow* window, int button, int act, int mods) {
 	if (act == GLFW_PRESS) {
 		switch (gamemode) {
 			case ID_MAINMENU :
-				switch(key) {
-					case GLFW_KEY_SPACE :
-						spacepressed = true;
-						switchLevel(ID_TEST);
-						bombcount = 5;
+				switch(button) {
+					case GLFW_MOUSE_BUTTON_LEFT :
+						if (ypos >= WINDOW_HEIGHT*9/10) {
+							switchLevel(ID_HELP);
+						} else {
+							spacepressed = true;
+							switchLevel(ID_TEST);
+							bombcount = 5;
+						}
 					break;
-					case GLFW_KEY_X :
-						hardmode = true;
-						switchLevel(ID_TEST);
-						bombcount = 5;
-					break;
-					case GLFW_KEY_H :
-						switchLevel(ID_HELP);
-					break;
-					case GLFW_KEY_ESCAPE :
-						glfwSetWindowShouldClose(window, GLFW_TRUE);
+					case GLFW_MOUSE_BUTTON_RIGHT :
+						if (ypos >= WINDOW_HEIGHT*9/10) {
+							glfwSetWindowShouldClose(window, GLFW_TRUE);
+						} else {
+							hardmode = true;
+							switchLevel(ID_TEST);
+							bombcount = 5;
+						}
 					break;
 				}
 			break;
 			case ID_HELP :
-				switch(key) {
-					case GLFW_KEY_Q : hardmode = true;
-					case GLFW_KEY_1 :
-						switchLevel(ID_TEST2);
-					break;
-					case GLFW_KEY_W : hardmode = true;
-					case GLFW_KEY_2 :
-						switchLevel(ID_TEST3);
-					break;
-					case GLFW_KEY_E : hardmode = true;
-					case GLFW_KEY_3 :
-						switchLevel(ID_TEST4);
-					break;
-					case GLFW_KEY_R : hardmode = true;
-					case GLFW_KEY_4 :
-						switchLevel(ID_TEST5);
-					break;
-					case GLFW_KEY_T : hardmode = true;
-					case GLFW_KEY_5 :
-						switchLevel(ID_TEST6);
-					break;
-					case GLFW_KEY_Y : hardmode = true;
-					case GLFW_KEY_6 :
-						switchLevel(ID_FINAL);
-					break;
-					case GLFW_KEY_SPACE :
-						switchLevel(ID_MAINMENU);
-					break;
-				}
+				switchLevel(ID_MAINMENU);
 			break;
 			case ID_GAMEOVER :
-				switch (key) {
-					case GLFW_KEY_ESCAPE :
-						glfwSetWindowShouldClose(window, GLFW_TRUE);
-					break;
-					default :
-						if (delaytime.getElapsed() > 1) {
-							switchLevel(ID_MAINMENU);
-						}
+				if (delaytime.getElapsed() > 1) {
+					switchLevel(ID_MAINMENU);
 				}
 			break;
 			case ID_WIN :
-				switch (key) {
-					case GLFW_KEY_ESCAPE :
-						glfwSetWindowShouldClose(window, GLFW_TRUE);
-					break;
-					default :
-						if (delaytime.getElapsed() > 3) {
-							switchLevel(ID_MAINMENU);
-						}
+				if (delaytime.getElapsed() > 3) {
+					switchLevel(ID_MAINMENU);
 				}
 			break;
 			default :
-				if (gamemode < ZONE_LIMIT && key == GLFW_KEY_X) {
+				if (gamemode < ZONE_LIMIT && button == GLFW_MOUSE_BUTTON_RIGHT) {
 					if (bombcount > 0) {
 						bomb();
 						bombcount--;
 					}
 				}
-				if (key == GLFW_KEY_SPACE && !gameover) {
+				if (button == GLFW_MOUSE_BUTTON_LEFT && !gameover) {
 					spacepressed = true;
 				}
 		}
-	} else if (key == GLFW_KEY_SPACE && act == GLFW_RELEASE) {
+	} else if (button == GLFW_MOUSE_BUTTON_LEFT && act == GLFW_RELEASE) {
 		spacepressed = false;
 	}
 }
@@ -1208,9 +1170,8 @@ int main() {
 	//Set context window yang ingin di-apakan
 	glfwMakeContextCurrent(gamewindow);
 	
-	//Set callback untuk input keyboard
-	glfwSetKeyCallback(gamewindow, keyCallback);
-	
+	//Set callback untuk input mouse
+	glfwSetMouseButtonCallback(gamewindow, mouseCallback);
 	
 	//Hide cursor
 	glfwSetInputMode(gamewindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -1251,6 +1212,7 @@ int main() {
 	convertStringToLetterData(mainmenu3, WINDOW_WIDTH/2 - getStringWidth(mainmenu3, linesize)/2, WINDOW_HEIGHT*7/10, linesize, mainmenutext, mainmenumark[3], true);
 	mainmenumark[4] = mainmenumark[3];
 	convertStringToLetterData(mainmenu4, WINDOW_WIDTH/2 - getStringWidth(mainmenu4, linesize)/2, WINDOW_HEIGHT*8/10, linesize, mainmenutext, mainmenumark[4], true);
+	linesize = 2;
 	mainmenumark[5] = mainmenumark[4];
 	convertStringToLetterData(mainmenu5, WINDOW_WIDTH/2 - getStringWidth(mainmenu5, linesize)/2, WINDOW_HEIGHT*9/10, linesize, mainmenutext, mainmenumark[5], true);
 	convertPointData(mainmenutext, 0, mainmenumark[5]);
@@ -1515,8 +1477,6 @@ int main() {
 					if (hardmode && Spw[0].getHealth() < 250 && Spw[0].getSpawnTime() < 0.01) {
 						Sq.removeAll();
 						Tr.removeAll();
-						Qu.add(QuadObj(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT, 0.05, 1));
-						Qu[0].getColorData()[2] = 0.0;
 						Qu.add(QuadObj(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT, 999, 999));
 						Spw[0].setSpawnTime(0.018);
 						Spw[0].setSpawnType(SQUARE_5);
@@ -1558,6 +1518,8 @@ int main() {
 				glDrawArrays(GL_LINES, 0, mainmenumark[1]/2);
 				glLineWidth(3);
 				glDrawArrays(GL_LINES, mainmenumark[1]/2, (mainmenumark[5]-mainmenumark[1])/2);
+				glLineWidth(2);
+				glDrawArrays(GL_LINES, mainmenumark[4]/2, (mainmenumark[5]-mainmenumark[1])/2);
 			break;
 			case ID_HELP: {
 				glVertexPointer (2, GL_FLOAT, 0, helptext);
@@ -1579,7 +1541,7 @@ int main() {
 				if (delaytime.getElapsed() > 6) {
 					switchLevel(ID_MAINMENU);
 				}
-				else if (delaytime.getElapsed() > 0.6) { 
+				else if (delaytime.getElapsed() > 0.8) { 
 					glLineWidth(7);
 					glVertexPointer (2, GL_FLOAT, 0, gameovertext);
 					glDrawArrays(GL_LINES, 0, gameovermark[1]/2);
@@ -1606,6 +1568,10 @@ int main() {
 		//Check gameover
 		checkGameOver();
 		
+		//Memindahkan buffer ke tempat yang akan digunakan
+		if (!gameover)
+			glfwSwapBuffers(gamewindow);
+		
 		if (gameover) { //gameover
 			if (delaytime.getElapsed() > 2) {
 				switchLevel(ID_GAMEOVER);
@@ -1614,10 +1580,7 @@ int main() {
 				delaytime.resetTime();
 			}
 		}
-		
-		//Memindahkan buffer ke tempat yang akan digunakan
-		if (!gameover)
-			glfwSwapBuffers(gamewindow);		
+			
 		glfwPollEvents();
 	}
 	
