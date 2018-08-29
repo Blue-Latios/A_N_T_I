@@ -13,13 +13,15 @@ big update: added to List AtEnd(). seperated iterators that get saved and iterat
 disabled story mode until levels are complete
 made zone1 and levelB easier
 beta-tested a few boss levels, need a lot of reworking and testing in future.
+Greatly reduced difficulty of "Rain"
+make it so that players will stay in the Astral Cage, also greatly reduced its difficulty.
+Slightly reduced Spiral difficulty (pretty much reducing difficulty in most levels)
+a bit graphics fix (swapbuffer when gameover)
 
 wishlist: muncul dari bawah
 boss buat yg meledak
 bullet yg berbelok ke arah player
 muncul musuh kecil yg nyerang player
-
-musuh berpola serangan lebih dari 1
 
 curly circle in circle attack (torso?)
 spawns square lasers in motion
@@ -27,3 +29,5 @@ freeze and scatter
 circle-form attack pattern
 
 Branches of levels in story mode
+
+-major update: Health (3 lives, 2 bombs per live)
